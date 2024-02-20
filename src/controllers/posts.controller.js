@@ -91,4 +91,15 @@ export class PostsController {
       next(err);
     }
   };
+
+  deletePost = async (req, res, next) => {
+    try {
+      const { postId } = req.params;
+
+      const deletePost = await this.postsService.deletePost(postId);
+      return res.status(200).json({ data: "게시글이 삭제되었습니다." });
+    } catch (err) {
+      next(err);
+    }
+  };
 }

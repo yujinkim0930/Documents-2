@@ -34,4 +34,14 @@ export class PostsRepository {
       },
     });
   };
+
+  deletePost = async (postId) => {
+    const deletedPost = await prisma.posts.delete({
+      where: {
+        postId: +postId,
+      },
+    });
+
+    return deletedPost;
+  };
 }

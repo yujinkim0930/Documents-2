@@ -50,4 +50,21 @@ export class postsService {
       updatedAt: updatePost.updatedAt,
     };
   };
+
+  deletePost = async (postId) => {
+    const post = await this.postsRepository.findPostById(postId);
+    if (!post) throw new Error("존재하지 않는 게시글입니다.");
+
+    await this.postsRepository.deletePost(postId);
+
+    return {
+      postId: post.postId,
+      userId: post.userId,
+      title: post.title,
+      content: post.content,
+      status: post.status,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+    };
+  };
 }

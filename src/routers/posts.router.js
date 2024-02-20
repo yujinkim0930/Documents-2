@@ -80,21 +80,26 @@ router.put(
 );
 
 // 이력서 삭제 API
-router.delete("/documents/:postId", needSigninMiddlware, async (req, res) => {
-  const postId = req.params.postId;
-  const document = await prisma.posts.findUnique({
-    where: { postId: +postId },
-  });
-  if (!document)
-    return res.status(401).json({ message: "이력서 조회에 실패하였습니다." });
-  const user = res.locals.users;
-  if (document.userId !== user.userId)
-    return res
-      .status(401)
-      .json({ message: "이력서를 삭제할 권한이 없습니다." });
-  await prisma.posts.delete({ where: { postId: +postId } });
+router.delete(
+  "/documents/:postId",
+  needSigninMiddlware,
+  postsController.deletePost
+);
+// router.delete("/documents/:postId", needSigninMiddlware, async (req, res) => {
+//   const postId = req.params.postId;
+//   const document = await prisma.posts.findUnique({
+//     where: { postId: +postId },
+//   });
+//   if (!document)
+//     return res.status(401).json({ message: "이력서 조회에 실패하였습니다." });
+//   const user = res.locals.users;
+//   if (document.userId !== user.userId)
+//     return res
+//       .status(401)
+//       .json({ message: "이력서를 삭제할 권한이 없습니다." });
+//   await prisma.posts.delete({ where: { postId: +postId } });
 
-  return res.status(200).json({ data: "게시글이 삭제되었습니다." });
-});
+//   return res.status(200).json({ data: "게시글이 삭제되었습니다." });
+// });
 
 export default router;
