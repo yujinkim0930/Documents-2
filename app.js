@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser";
 import expressSession from "express-session";
 import expressMySQLSession from "express-mysql-session";
 import UsersRouter from "./src/routers/users.router.js";
-import DocumentsRouter from "./src/routers/documents.router.js";
+import PostsRouter from "./src/routers/posts.router.js";
 
 dotenv.config();
 
@@ -35,7 +35,7 @@ app.use(
   })
 );
 
-app.use([UsersRouter, DocumentsRouter]);
+app.use([UsersRouter, PostsRouter]);
 
 app.listen(PORT, () => {
   console.log(PORT, "포트로 서버가 열렸어요!");
