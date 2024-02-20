@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import expressSession from "express-session";
 import expressMySQLSession from "express-mysql-session";
-import UsersRouter from "./routers/users.router.js";
-import DocumentsRouter from "./routers/documents.router.js";
+import UsersRouter from "./src/routers/users.router.js";
+import DocumentsRouter from "./src/routers/documents.router.js";
 
 dotenv.config();
 
