@@ -9,22 +9,6 @@ const postsController = new PostsController();
 
 // 이력서 생성 API
 router.post("/documents", needSigninMiddlware, postsController.createPost);
-// router.post("/documents", needSigninMiddlware, async (req, res) => {
-//   const { title, content } = req.body;
-//   const user = res.locals.users;
-//   if (!title)
-//     return res.status(400).json({ errorMessage: "제목을 입력해주세요." });
-//   if (!content)
-//     return res.status(400).json({ errorMessage: "자기소개를 입력해주세요." });
-//   const post = await prisma.posts.create({
-//     data: {
-//       userId: user.userId,
-//       title: title,
-//       content: content,
-//     },
-//   });
-//   return res.status(201).json({ message: "이력서가 등록되었습니다." });
-// });
 
 // 이력서 전체 목록 조회 API
 router.get("/documents", async (req, res) => {
