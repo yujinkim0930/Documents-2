@@ -25,6 +25,18 @@ export class postsService {
     const posts = await this.postsRepository.findAllPosts();
   };
 
+  findPostById = async (postId) => {
+    const post = await this.postsRepository.findPostById(postId);
+
+    return {
+      postId: post.postId,
+      title: post.title,
+      content: post.content,
+      status: post.status,
+      createdAt: post.createdAt,
+    };
+  };
+
   updatePost = async (postId, userId, title, content, status) => {
     const post = await this.postsRepository.findPostById(postId);
     if (!post) throw new Error("이력서 조회에 실패하였습니다.");

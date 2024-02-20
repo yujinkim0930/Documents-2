@@ -48,6 +48,22 @@ export class PostsController {
     }
   };
 
+  // 게시글 상세 조회
+  getPostById = async (req, res, next) => {
+    try {
+      const { postId } = req.params;
+      if (!postId)
+        return res
+          .status(404)
+          .json({ message: "이력서 조회에 실패하였습니다." });
+      const post = await this.postsService.findPostById(postId);
+
+      return res.status(200).json({ data: post });
+    } catch (err) {
+      next(err);
+    }
+  };
+
   // 게시글 수정
   updatePost = async (req, res, next) => {
     try {
