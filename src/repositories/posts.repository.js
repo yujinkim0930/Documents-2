@@ -13,4 +13,25 @@ export class PostsRepository {
 
     return createPost;
   };
+
+  findPostById = async (postId) => {
+    const post = await prisma.posts.findUnique({
+      where: { postId: +postId },
+    });
+
+    return post;
+  };
+
+  updatePost = async (postId, userId, title, content, status) => {
+    const updatePost = await prisma.posts.update({
+      where: {
+        postId: +postId,
+      },
+      data: {
+        title,
+        content,
+        status,
+      },
+    });
+  };
 }

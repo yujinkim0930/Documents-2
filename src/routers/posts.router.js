@@ -11,7 +11,7 @@ const postsController = new PostsController();
 router.post("/documents", needSigninMiddlware, postsController.createPost);
 
 // 이력서 전체 목록 조회 API
-router.get("/documents", postsController.getPostById);
+router.get("/documents", postsController.getPosts);
 // router.get("/documents", async (req, res) => {
 //   const orderKey = req.query.orderKey ?? "postId";
 //   const orderValue = req.query.orderValue ?? "desc";
@@ -73,50 +73,11 @@ router.get("/documents/:postId", async (req, res) => {
 });
 
 // 이력서 수정 API
-router.put("/documents/:postId", needSigninMiddlware, async (req, res) => {
-  const user = res.locals.users;
-  const { title, content, status } = req.body;
-  const postId = req.params.postId;
-  if (!title)
-    return res.status(400).json({ errorMessage: "제목을 입력해주세요." });
-  if (!content)
-    return res.status(400).json({ errorMessage: "자기소개를 입력해주세요." });
-  if (!status)
-    return res.status(400).json({ errorMessage: "상태 값을 입력해주세요." });
-  if (
-    ![
-      "APPLY",
-      "DROP",
-      "PASS",
-      "INTERVIEW1",
-      "INTERVIEW2",
-      "FINAL_PASS",
-    ].includes(status)
-  ) {
-    return res.status(400).json({ message: "올바르지 않은 상태 값입니다." });
-  }
-  const document = await prisma.posts.findUnique({
-    where: { postId: +postId },
-  });
-  if (!postId)
-    return res.status(404).json({ message: "이력서 조회에 실패하였습니다." });
-  if (user.grade === "user" && document.userId !== user.userId)
-    return res
-      .status(401)
-      .json({ message: "이력서를 수정할 권한이 없습니다." });
-  await prisma.posts.update({
-    data: {
-      title,
-      content,
-      status,
-    },
-    where: {
-      postId: +postId,
-    },
-  });
-
-  return res.status(200).json({ data: "이력서가 수정되었습니다." });
-});
+router.put(
+  "/documents/:postId",
+  needSigninMiddlware,
+  postsController.updatePost
+);
 
 // 이력서 삭제 API
 router.delete("/documents/:postId", needSigninMiddlware, async (req, res) => {

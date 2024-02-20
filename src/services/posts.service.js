@@ -20,4 +20,34 @@ export class postsService {
       updatedAt: createPost.updatedAt,
     };
   };
+
+  findAllPosts = async () => {
+    const posts = await this.postsRepository.findAllPosts();
+  };
+
+  updatePost = async (postId, userId, title, content, status) => {
+    const post = await this.postsRepository.findPostById(postId);
+    if (!post) throw new Error("이력서 조회에 실패하였습니다.");
+    if (post.userId !== userId)
+      throw new Error("이력서를 수정할 권한이 없습니다.");
+    await this.postsRepository.updatePost(
+      postId,
+      userId,
+      title,
+      content,
+      status
+    );
+
+    const updatePost = await this.postsRepository.findPostById(postId);
+
+    return {
+      postId: updatePost.postId,
+      userId: updatePost.userId,
+      title: updatePost.title,
+      content: updatePost.content,
+      status: updatePost.status,
+      createdAt: updatePost.createdAt,
+      updatedAt: updatePost.updatedAt,
+    };
+  };
 }
