@@ -37,36 +37,28 @@ export class UsersController {
 
       //clientId (kakao)
       if (client_Id) {
-        const user = await prisma.users.findFirst({
-          where: {
-            client_Id,
-          },
-        });
+        const user = await this.UsersService.findFirstClient();
 
         if (user) {
           return res
             .status(409)
             .json({ errorMessage: "이미 가입된 사용자입니다." });
         }
-        const createUser = await this.UsersService.createUser(
+        const createUser = await this.UsersService.createUserClient(
           client_Id,
           name,
           grade
         );
         return res.status(201).json({ client_Id, name });
       } else {
-        const user = await prisma.users.findFirst({
-          where: {
-            email,
-          },
-        });
+        const user = await this.UsersService.findFirstEmail();
 
         if (user) {
           return res
             .status(409)
             .json({ errorMessage: "이미 존재하는 이메일입니다." });
         }
-        const createUser = await this.UsersService.createUser(
+        const createUser = await this.UsersService.createUserEmail(
           email,
           password,
           name,
