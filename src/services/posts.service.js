@@ -23,6 +23,16 @@ export class postsService {
 
   findAllPosts = async () => {
     const posts = await this.postsRepository.findAllPosts();
+
+    return posts.map((post) => {
+      return {
+        postId: post.postId,
+        nickname: post.nickname,
+        title: post.title,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
+      };
+    });
   };
 
   findPostById = async (postId) => {

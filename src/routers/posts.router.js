@@ -49,29 +49,6 @@ router.get("/documents", postsController.getPosts);
 
 // 이력서 상세 조회 API
 router.get("/documents/:postId", postsController.getPostById);
-// router.get("/documents/:postId", async (req, res) => {
-//   const postId = req.params.postId;
-//   if (!postId)
-//     return res.status(404).json({ message: "이력서 조회에 실패하였습니다." });
-//   const post = await prisma.posts.findFirst({
-//     where: { postId: +postId },
-//     select: {
-//       postId: true,
-//       title: true,
-//       content: true,
-//       user: {
-//         select: {
-//           name: true,
-//         },
-//       },
-//       status: true,
-//       createdAt: true,
-//     },
-//   });
-//   post.name = post.user.name;
-//   delete post.user;
-//   return res.status(200).json({ data: post });
-// });
 
 // 이력서 수정 API
 router.put(
