@@ -1,8 +1,7 @@
 import { dataSource } from "../typeorm";
-import { PostsRepository } from "./posts.repository.js";
+import { PostsRepository } from "../repositories/posts.repository.js";
 
 jest.mock("../typeorm");
-
 describe("PostsRepository", () => {
   it("정렬된 전체 이력서 조회", async () => {
     dataSource.getRepository = (tableName) => ({

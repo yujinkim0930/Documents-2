@@ -7,7 +7,6 @@ export default async function (req, res, next) {
     if (!authorization) {
       throw new Error("인증 정보가 올바르지 않습니다.");
     }
-    console.log(authorization);
     const [tokenType, tokenValue] = authorization.split(" ");
     if (tokenType !== "Bearer") {
       throw new Error("인증 정보가 올바르지 않습니다.");

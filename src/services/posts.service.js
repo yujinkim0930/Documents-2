@@ -1,5 +1,4 @@
 import { PostsRepository } from "../repositories/posts.repository.js";
-import { dataSource } from "../typeorm/index.js";
 
 export class postsService {
   postsRepository = new PostsRepository();

@@ -4,6 +4,7 @@ export class PostsRepository {
   createPost = async (data) => {
     const createPost = await dataSource.getRepository("Posts").create({
       ...data,
+      status: "APPLY",
       createdAt: new Date(),
       updatedAt: new Date(),
     });
