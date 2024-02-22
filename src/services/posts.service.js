@@ -32,13 +32,11 @@ export class postsService {
         code: 401,
         message: "이력서 조회에 실패하였습니다.",
       };
-    console.log(post);
     if (byUser.grade === "user" && post.userId !== byUser.userId)
       throw {
         code: 401,
         message: "이력서를 수정할 권한이 없습니다.",
       };
-    console.log("bb");
     return await this.postsRepository.updatePost(postId, data);
   };
 
@@ -55,7 +53,6 @@ export class postsService {
         code: 400,
         message: "이력서를 삭제할 권한이 없습니다.",
       };
-
-    await this.resumeRepository.deleteResumeByResumeId(resumeId);
+    return await this.postsRepository.deletePost(postId);
   };
 }

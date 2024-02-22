@@ -2,10 +2,14 @@ import { dataSource } from "../typeorm/index.js";
 
 export class PostsRepository {
   createPost = async (data) => {
-    const createPost = await dataSource.getRepository("Posts").create(data);
+    const createPost = await dataSource.getRepository("Posts").create({
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+    await dataSource.getRepository("Posts").save(createPost);
     return createPost;
   };
-
   findAllPosts = async (sort) => {
     const posts = await dataSource.getRepository("Posts").find({
       select: {
@@ -48,23 +52,19 @@ export class PostsRepository {
   };
 
   updatePost = async (postId, data) => {
-    const updatePost = await dataSource.getRepository("Posts").update(
-      {
-        where: {
-          postId: +postId,
-        },
-      },
-      data
-    );
+    console.log(postId, data);
+    const updatePost = await dataSource
+      .getRepository("Posts")
+      .update({ postId }, data);
+
     return updatePost;
   };
 
   deletePost = async (postId) => {
-    const deletedPost = await dataSource.getRepository("Posts").delete({
-      where: {
-        postId: +postId,
-      },
-    });
+    console.log("aaa");
+    const deletedPost = await dataSource
+      .getRepository("Posts")
+      .delete({ postId });
 
     return deletedPost;
   };
