@@ -1,8 +1,8 @@
-import { prisma } from "../../models/index.js";
+import dataSource from "../typeorm/index.js";
 
 export class PostsRepository {
   createPost = async (data) => {
-    const createPost = await prisma.posts.create({
+    const createPost = await dataSource.getRepository("Posts").create({
       data,
     });
 
@@ -10,7 +10,7 @@ export class PostsRepository {
   };
 
   findAllPosts = async (sort) => {
-    const posts = await prisma.posts.findMany({
+    const posts = await dataSource.getRepository("Posts").find({
       select: {
         postId: true,
         title: true,
@@ -23,17 +23,15 @@ export class PostsRepository {
         status: true,
         createdAt: true,
       },
-      orderBy: [
-        {
-          [sort.orderKey]: sort.orderValue,
-        },
-      ],
+      order: {
+        [sort.orderKey]: sort.orderValue,
+      },
     });
     return posts;
   };
 
   findPostById = async (postId) => {
-    const post = await prisma.posts.findFirst({
+    const post = await dataSource.getRepository("Posts").findOne({
       where: { postId: +postId },
       select: {
         postId: true,
@@ -52,18 +50,20 @@ export class PostsRepository {
   };
 
   updatePost = async (postId, data) => {
-    const updatePost = await prisma.posts.update({
-      where: {
-        postId: +postId,
+    const updatePost = await dataSource.getRepository("Posts").update(
+      {
+        where: {
+          postId: +postId,
+        },
       },
-      data,
-    });
+      data
+    );
 
     return updatePost;
   };
 
   deletePost = async (postId) => {
-    const deletedPost = await prisma.posts.delete({
+    const deletedPost = await dataSource.getRepository("Posts").delete({
       where: {
         postId: +postId,
       },

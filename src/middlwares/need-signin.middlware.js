@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { prisma } from "../../models/index.js";
+import dataSource from "../typeorm/index.js";
 
 export default async function (req, res, next) {
   try {
@@ -20,7 +20,7 @@ export default async function (req, res, next) {
     if (!token.userId) {
       throw new Error("인증 정보가 올바르지 않습니다.");
     }
-    const user = await prisma.users.findFirst({
+    const user = await dataSource.getRepository("Users").findOne({
       where: {
         userId: token.userId,
       },

@@ -1,8 +1,8 @@
-import { prisma } from "../../models/index.js";
+import dataSource from "../typeorm/index.js";
 
 export class UsersRepository {
   findFirstClient = async (client_Id) => {
-    const user = await prisma.users.findFirst({
+    const user = await dataSource.getRepository("Users").findOne({
       where: { client_Id },
     });
 
@@ -10,13 +10,13 @@ export class UsersRepository {
   };
 
   createUser = async (data) => {
-    await prisma.users.create({
+    await dataSource.getRepository("Users").create({
       data,
     });
   };
 
   findFirstEmail = async (email) => {
-    const user = await prisma.users.findFirst({
+    const user = await dataSource.getRepository("Users").findOne({
       where: { email },
     });
 
@@ -24,7 +24,7 @@ export class UsersRepository {
   };
 
   findFirstEmailAndPw = async (email, password) => {
-    const user = await prisma.users.findFirst({
+    const user = await dataSource.getRepository("Users").findOne({
       where: {
         email,
         password,
