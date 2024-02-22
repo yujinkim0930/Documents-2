@@ -114,7 +114,14 @@ router.post("/sign-in", async (req, res) => {
     process.env.SECRET_KEY,
     { expiresIn: "12h" }
   );
-  return res.status(200).json({ accessToken });
+  const refreshToken = jwt.sign(
+    {
+      userId: user.userId,
+    },
+    process.env.SECRET_KEY,
+    { expiresIn: "7d" }
+  );
+  return res.status(200).json({ accessToken, refreshToken });
 });
 
 // 내 정보 조회 API

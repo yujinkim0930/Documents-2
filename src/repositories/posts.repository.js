@@ -1,43 +1,65 @@
 import { prisma } from "../../models/index.js";
-import needSigninMiddlware from "../middlwares/need-signin.middlware.js";
 
 export class PostsRepository {
-  createPost = async (userId, title, content) => {
+  createPost = async (data) => {
     const createPost = await prisma.posts.create({
-      data: {
-        userId,
-        title,
-        content,
-      },
+      data,
     });
 
     return createPost;
   };
 
-  findAllPosts = async () => {
-    const posts = await prisma.posts.findMany();
+  findAllPosts = async (sort) => {
+    const posts = await prisma.posts.findMany({
+      select: {
+        postId: true,
+        title: true,
+        content: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        status: true,
+        createdAt: true,
+      },
+      orderBy: [
+        {
+          [sort.orderKey]: sort.orderValue,
+        },
+      ],
+    });
     return posts;
   };
 
   findPostById = async (postId) => {
-    const post = await prisma.posts.findUnique({
+    const post = await prisma.posts.findFirst({
       where: { postId: +postId },
+      select: {
+        postId: true,
+        title: true,
+        content: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        status: true,
+        createdAt: true,
+      },
     });
-
     return post;
   };
 
-  updatePost = async (postId, userId, title, content, status) => {
+  updatePost = async (postId, data) => {
     const updatePost = await prisma.posts.update({
       where: {
         postId: +postId,
       },
-      data: {
-        title,
-        content,
-        status,
-      },
+      data,
     });
+
+    return updatePost;
   };
 
   deletePost = async (postId) => {

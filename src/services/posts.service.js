@@ -9,84 +9,50 @@ export class postsService {
       title,
       content
     );
-
-    return {
-      postId: createPost.postId,
-      userId: createPost.userId,
-      title: createPost.title,
-      content: createPost.content,
-      status: createPost.status,
-      createdAt: createPost.createdAt,
-      updatedAt: createPost.updatedAt,
-    };
   };
 
-  findAllPosts = async () => {
-    const posts = await this.postsRepository.findAllPosts();
+  findAllPosts = async (sort) => {
+    const posts = await this.postsRepository.findAllPosts(sort);
 
-    return posts.map((post) => {
-      return {
-        postId: post.postId,
-        nickname: post.nickname,
-        title: post.title,
-        createdAt: post.createdAt,
-        updatedAt: post.updatedAt,
-      };
-    });
+    return posts;
   };
 
   findPostById = async (postId) => {
     const post = await this.postsRepository.findPostById(postId);
 
-    return {
-      postId: post.postId,
-      title: post.title,
-      content: post.content,
-      status: post.status,
-      createdAt: post.createdAt,
-    };
+    return post;
   };
 
-  updatePost = async (postId, userId, title, content, status) => {
+  updatePost = async (postId, data, byUser) => {
     const post = await this.postsRepository.findPostById(postId);
-    if (!post) throw new Error("이력서 조회에 실패하였습니다.");
-    if (post.userId !== userId)
-      throw new Error("이력서를 수정할 권한이 없습니다.");
-    await this.postsRepository.updatePost(
-      postId,
-      userId,
-      title,
-      content,
-      status
-    );
+    if (!post)
+      throw {
+        code: 401,
+        message: "이력서 조회에 실패하였습니다.",
+      };
+    if (byUser.grade === "user" && post.userId !== byUser.userId)
+      throw {
+        code: 401,
+        message: "이력서를 수정할 권한이 없습니다.",
+      };
 
-    const updatePost = await this.postsRepository.findPostById(postId);
-
-    return {
-      postId: updatePost.postId,
-      userId: updatePost.userId,
-      title: updatePost.title,
-      content: updatePost.content,
-      status: updatePost.status,
-      createdAt: updatePost.createdAt,
-      updatedAt: updatePost.updatedAt,
-    };
+    await this.postsRepository.findPostById(postId, data);
   };
 
-  deletePost = async (postId) => {
+  deletePost = async (postId, byUser) => {
     const post = await this.postsRepository.findPostById(postId);
-    if (!post) throw new Error("존재하지 않는 게시글입니다.");
+    if (!post)
+      throw {
+        code: 400,
+        message: "이력서 조회에 실패하였습니다.",
+      };
 
-    await this.postsRepository.deletePost(postId);
+    if (post.userId !== byUser.userId)
+      throw {
+        code: 400,
+        message: "이력서를 삭제할 권한이 없습니다.",
+      };
 
-    return {
-      postId: post.postId,
-      userId: post.userId,
-      title: post.title,
-      content: post.content,
-      status: post.status,
-      createdAt: post.createdAt,
-      updatedAt: post.updatedAt,
-    };
+    await prisma.posts.delete({ where: { postId: +postId } });
   };
 }

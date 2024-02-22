@@ -27,7 +27,6 @@ export class PostsController {
   // 게시글 조회
   getPosts = async (req, res, next) => {
     try {
-      const posts = await this.postsService.findAllPosts();
       const orderKey = req.query.orderKey ?? "postId";
       const orderValue = req.query.orderValue ?? "desc";
 
@@ -41,7 +40,10 @@ export class PostsController {
           .status(400)
           .json({ message: "orderValue가 올바르지 않습니다." });
       }
-
+      const posts = await this.postsService.findAllPosts({
+        orderKey,
+        orderValue: orderValue.toLowerCase(),
+      });
       return res.status(200).json({ data: posts });
     } catch (err) {
       next(err);
@@ -94,14 +96,11 @@ export class PostsController {
           .status(400)
           .json({ message: "올바르지 않은 상태 값입니다." });
       }
-      const updatedPost = await this.postsService.updatePost(
+      await this.postsService.updatePost(
         postId,
-        user.userId,
-        title,
-        content,
-        status
+        (title, content, status),
+        user
       );
-
       return res.status(200).json({ data: "이력서가 수정되었습니다." });
     } catch (err) {
       next(err);
@@ -110,9 +109,10 @@ export class PostsController {
 
   deletePost = async (req, res, next) => {
     try {
+      const user = res.locals.user;
       const { postId } = req.params;
+      await this.postsService.deletePost(postId, user);
 
-      const deletePost = await this.postsService.deletePost(postId);
       return res.status(200).json({ data: "게시글이 삭제되었습니다." });
     } catch (err) {
       next(err);
