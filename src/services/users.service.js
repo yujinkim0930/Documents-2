@@ -6,10 +6,10 @@ export class UsersService {
   UsersRepository = new UsersRepository();
 
   createUser = async (data) => {
-    const { email, client_Id, password, name, grade } = data;
+    const { email, client_id, password, name, grade } = data;
     //clientId (kakao)
-    if (client_Id) {
-      const user = await this.UsersRepository.findFirstClient(client_Id);
+    if (client_id) {
+      const user = await this.UsersRepository.findFirstClient(client_id);
 
       if (user) {
         throw {
@@ -18,7 +18,7 @@ export class UsersService {
         };
       }
       await this.UsersRepository.createUser({
-        client_Id,
+        client_id,
         name,
         grade,
       });
@@ -42,11 +42,11 @@ export class UsersService {
     }
   };
 
-  signIn = async (client_Id, email, password) => {
+  signIn = async (client_id, email, password) => {
     let user;
-    if (client_Id) {
+    if (client_id) {
       // 카카오 로그인
-      user = await this.UsersRepository.findFirstClient(client_Id);
+      user = await this.UsersRepository.findFirstClient(client_id);
 
       if (!user)
         throw { code: 401, message: "올바르지 않은 로그인 정보입니다." };

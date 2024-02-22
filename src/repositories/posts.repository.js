@@ -1,4 +1,4 @@
-import dataSource from "../typeorm/index.js";
+import { dataSource } from "../typeorm/index.js";
 
 export class PostsRepository {
   createPost = async (data) => {

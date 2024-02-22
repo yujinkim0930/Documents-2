@@ -1,21 +1,21 @@
-import typeorm from "typeorm";
+import { DataSource } from "typeorm";
 import PostEntity from "./entity/post.entity.js";
 import UserEntity from "./entity/user.entity.js";
 import dotenv from "dotenv";
 
 dotenv.config();
 
-var dataSource = new typeorm.DataSource({
+export const dataSource = new DataSource({
   type: "mysql",
-  host: process.env.DATABASE_HOST,
-  port: process.env.DATABASE_PORT,
-  username: process.env.DATABASE_USERNAME,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
+  host: "localhost",
+  port: 3306,
+  username: "root",
+  password: "tkfkdgody0505^^",
+  database: "resume_db",
   synchronize: false,
-  entities: [PostEntity, UserEntity],
+  entities: [UserEntity, PostEntity],
 });
 
-dataSource.initialize();
-
-export default dataSource;
+dataSource.initialize().then(() => {
+  console.log("TypeORM init");
+});

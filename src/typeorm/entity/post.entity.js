@@ -1,6 +1,6 @@
 import { EntitySchema } from "typeorm";
 
-new EntitySchema({
+export default new EntitySchema({
   name: "Posts", // Will use table name `category` as default behaviour.
   tableName: "posts", // Optional: Provide `tableName` property to override the default behaviour for table name.
   columns: {
@@ -38,5 +38,3 @@ new EntitySchema({
     },
   },
 });
-
-export default EntitySchema;

@@ -1,9 +1,9 @@
-import dataSource from "../typeorm/index.js";
+import { dataSource } from "../typeorm/index.js";
 
 export class UsersRepository {
-  findFirstClient = async (client_Id) => {
+  findFirstClient = async (client_id) => {
     const user = await dataSource.getRepository("Users").findOne({
-      where: { client_Id },
+      where: { client_id },
     });
 
     return user;

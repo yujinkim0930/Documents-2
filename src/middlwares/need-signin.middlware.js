@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import dataSource from "../typeorm/index.js";
+import { dataSource } from "../typeorm/index.js";
 
 export default async function (req, res, next) {
   try {
@@ -7,7 +7,7 @@ export default async function (req, res, next) {
     if (!authorization) {
       throw new Error("인증 정보가 올바르지 않습니다.");
     }
-
+    console.log(authorization);
     const [tokenType, tokenValue] = authorization.split(" ");
     if (tokenType !== "Bearer") {
       throw new Error("인증 정보가 올바르지 않습니다.");
@@ -28,8 +28,8 @@ export default async function (req, res, next) {
     if (!user) {
       throw new Error("인증 정보가 올바르지 않습니다.");
     }
-
-    res.locals.users = user;
+    console.log(user);
+    res.locals.user = user;
 
     next();
   } catch (error) {

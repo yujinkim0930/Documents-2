@@ -71,7 +71,8 @@ export class PostsController {
     try {
       const { postId } = req.params;
       const { title, content, status } = req.body;
-      const user = res.locals.users;
+      const user = res.locals.user;
+      console.log("aaa");
       if (!title)
         return res.status(400).json({ errorMessage: "제목을 입력해주세요." });
       if (!content)
@@ -98,7 +99,7 @@ export class PostsController {
       }
       await this.postsService.updatePost(
         postId,
-        (title, content, status),
+        { title, content, status },
         user
       );
       return res.status(200).json({ data: "이력서가 수정되었습니다." });
@@ -110,7 +111,7 @@ export class PostsController {
   deletePost = async (req, res, next) => {
     try {
       const user = res.locals.user;
-      const { postId } = req.params;
+      const postId = req.params.postId;
       await this.postsService.deletePost(postId, user);
 
       return res.status(200).json({ data: "게시글이 삭제되었습니다." });

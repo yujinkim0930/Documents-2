@@ -4,11 +4,11 @@ export class UsersController {
   UsersService = new UsersService();
 
   createUser = async (req, res) => {
-    const { email, client_Id, password, pwCheck, name, grade } = req.body;
+    const { email, client_id, password, pwCheck, name, grade } = req.body;
     if (grade && !["user", "admin"].includes(grade)) {
       return res.status(400).json({ message: "등급이 올바르지 않습니다." });
     }
-    if (!client_Id) {
+    if (!client_id) {
       if (!email) {
         return res.status(400).json({ message: "이메일을 입력해주세요." });
       }
@@ -34,7 +34,7 @@ export class UsersController {
     }
     await this.UsersService.createUser({
       email,
-      client_Id,
+      client_id,
       password,
       name,
       grade,
@@ -43,9 +43,9 @@ export class UsersController {
   };
 
   signIn = async (req, res) => {
-    const { client_Id, email, password } = req.body;
+    const { client_id, email, password } = req.body;
 
-    const token = await this.UsersService.signIn(client_Id, email, password);
+    const token = await this.UsersService.signIn(client_id, email, password);
     return res.json(token);
   };
 

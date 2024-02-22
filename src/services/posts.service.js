@@ -1,4 +1,5 @@
 import { PostsRepository } from "../repositories/posts.repository.js";
+import { dataSource } from "../typeorm/index.js";
 
 export class postsService {
   postsRepository = new PostsRepository();
@@ -36,10 +37,10 @@ export class postsService {
         message: "이력서를 수정할 권한이 없습니다.",
       };
 
-    await this.postsRepository.findPostById(postId, data);
+    return await this.postsRepository.updatePost(postId, data);
   };
 
-  deletePost = async (postId, byUser) => {
+  deletePost = async (postId, user) => {
     const post = await this.postsRepository.findPostById(postId);
     if (!post)
       throw {
@@ -47,12 +48,12 @@ export class postsService {
         message: "이력서 조회에 실패하였습니다.",
       };
 
-    if (post.userId !== byUser.userId)
+    if (post.userId !== user.userId)
       throw {
         code: 400,
         message: "이력서를 삭제할 권한이 없습니다.",
       };
 
-    await prisma.posts.delete({ where: { postId: +postId } });
+    await this.resumeRepository.deleteResumeByResumeId(resumeId);
   };
 }
