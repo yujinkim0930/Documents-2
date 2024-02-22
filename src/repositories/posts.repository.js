@@ -2,10 +2,7 @@ import { dataSource } from "../typeorm/index.js";
 
 export class PostsRepository {
   createPost = async (data) => {
-    const createPost = await dataSource.getRepository("Posts").create({
-      data,
-    });
-
+    const createPost = await dataSource.getRepository("Posts").create(data);
     return createPost;
   };
 
@@ -35,6 +32,7 @@ export class PostsRepository {
       where: { postId: +postId },
       select: {
         postId: true,
+        userId: true,
         title: true,
         content: true,
         user: {
@@ -58,7 +56,6 @@ export class PostsRepository {
       },
       data
     );
-
     return updatePost;
   };
 

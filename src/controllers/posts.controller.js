@@ -6,7 +6,8 @@ export class PostsController {
   createPost = async (req, res, next) => {
     try {
       const { title, content } = req.body;
-      const user = res.locals.users;
+      const user = res.locals.user;
+      console.log(user);
       if (!title)
         return res.status(400).json({ errorMessage: "제목을 입력해주세요." });
       if (!content)
@@ -18,6 +19,8 @@ export class PostsController {
         title,
         content
       );
+      console.log("컨트롤러", createPost);
+
       return res.status(201).json({ message: "이력서가 등록되었습니다." });
     } catch (err) {
       next(err);
@@ -102,6 +105,7 @@ export class PostsController {
         { title, content, status },
         user
       );
+
       return res.status(200).json({ data: "이력서가 수정되었습니다." });
     } catch (err) {
       next(err);

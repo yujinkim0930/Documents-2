@@ -5,11 +5,12 @@ export class postsService {
   postsRepository = new PostsRepository();
 
   createPost = async (userId, title, content) => {
-    const createPost = await this.postsRepository.createPost(
+    const createPost = await this.postsRepository.createPost({
       userId,
       title,
-      content
-    );
+      content,
+    });
+    return createPost;
   };
 
   findAllPosts = async (sort) => {
@@ -31,12 +32,13 @@ export class postsService {
         code: 401,
         message: "이력서 조회에 실패하였습니다.",
       };
+    console.log(post);
     if (byUser.grade === "user" && post.userId !== byUser.userId)
       throw {
         code: 401,
         message: "이력서를 수정할 권한이 없습니다.",
       };
-
+    console.log("bb");
     return await this.postsRepository.updatePost(postId, data);
   };
 

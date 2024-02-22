@@ -50,7 +50,7 @@ export class UsersController {
   };
 
   getMyInfo = async (req, res) => {
-    const user = res.locals.users;
+    const user = res.locals.user;
     return res.status(200).json({
       email: user.email,
       name: user.name,
